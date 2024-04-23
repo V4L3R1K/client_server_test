@@ -58,5 +58,3 @@ while True:
         print(e)
         client.close()
         exit()
-
-client.close()

@@ -1,4 +1,5 @@
 import socket
+import log
 
 HEADER_LENGTH = 8
 FORMAT = 'utf-8'
@@ -14,16 +15,28 @@ def send(sock, msg):
         sock.send(msg_len_encoded)
 
         sock.send(msg.encode(FORMAT))
+
+        sockname = sock.getsockname()
+        sockname = str(sockname[0])+":"+str(sockname[1])
+        log.log("["+sockname+"] [SEND] "+msg)
     except:
-        print("send err")
-        pass
+        sockname = sock.getsockname()
+        sockname = str(sockname[0])+":"+str(sockname[1])
+        log.log("["+sockname+"] [SEND ERROR]")
 
 
 def recv(sock):
     try:
         msg_len = int(sock.recv(HEADER_LENGTH).decode(FORMAT))
         msg = sock.recv(msg_len).decode(FORMAT)
+
+        sockname = sock.getsockname()
+        sockname = str(sockname[0])+":"+str(sockname[1])
+        log.log("["+sockname+"] [RECV] "+msg)
+
         return msg
     except:
-        print("recv err")
+        sockname = sock.getsockname()
+        sockname = str(sockname[0])+":"+str(sockname[1])
+        log.log("["+sockname+"] [RECV ERROR]")
         return DISCONNECT_MSG
